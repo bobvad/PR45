@@ -44,9 +44,8 @@ namespace APIS_Degtiannikov.Controllers
         /// <param name="Password">Пароль пользователя</param>
         /// <remarks>Данный метод регистрирует нового пользователя в системе</remarks>
         /// <response code="200">Пользователь успешно зарегистрирован</response>
-        /// <response code="400">Неверные данные для регистрации</response>
-        /// <response code="409">Пользователь с таким логином уже существует</response>
-        /// <response code="500">При выполнении запроса на стороне сервера возникли ошибки</response>
+        ///<response code = "403">Запрос не имеет данных для регистрации</response>
+        ///<response code="500">При выполнении запроса на стороне сервера возникли ошибки</response>
         [Route("RegIn")]
         [HttpPost]
         [ProducesResponseType(typeof(Users), 200)]
@@ -70,16 +69,11 @@ namespace APIS_Degtiannikov.Controllers
 
                     context.Users.Add(user);
                     context.SaveChanges();
-                    return Ok(new
-                    {
-                        userId = user.Id,
-                        login = user.Login
-                    });
+                    return Json(user);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка при регистрации: {ex.Message}");
                 return StatusCode(500, "Произошла ошибка при регистрации пользователя");
             }
         }

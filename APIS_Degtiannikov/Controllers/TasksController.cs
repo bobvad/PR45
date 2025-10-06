@@ -118,5 +118,59 @@ namespace APIS_Degtiannikov.Controllers
                 return StatusCode(500);
             }
         }
+        /// <summary>
+        /// Метод удаления задачи
+        /// </summary> 
+        /// <param name="Id">Код задачи</param>
+        /// <remarks>Данный метод удаляет задачу в базе данных</remarks>
+        ///<response code="200">Задача успешно удалена</response>
+        ///<response code="500">При выполнении запроса возникли ошибки</response>
+        [ApiExplorerSettings(GroupName = "v4")]
+        [HttpDelete]
+        [Route("DeleteById")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public ActionResult DeleteById(int id)
+        {
+            try
+            {
+                TasksContext context = new TasksContext();
+                Task task = context.Tasks.Where(x => x.Id == id).First();
+                context.Tasks.Remove(task);
+                context.SaveChanges();
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+        /// <summary>
+        /// Метод удаления задачи
+        /// </summary> 
+        /// <param name="">Код задачи</param>
+        /// <remarks>Данный метод удаляет задачу в базе данных</remarks>
+        ///<response code="200">Задача успешно удалена</response>
+        ///<response code="500">При выполнении запроса возникли ошибки</response>
+        [ApiExplorerSettings(GroupName = "v4")]
+        [HttpDelete]
+        [Route("DeleteByAll")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public ActionResult DeleteByAll(int id)
+        {
+            try
+            {
+                TasksContext context = new TasksContext();
+                var allTasks = context.Tasks.ToList();
+                context.Tasks.RemoveRange(allTasks);
+                context.SaveChanges();
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }

@@ -23,6 +23,12 @@ namespace APIS_Degtiannikov
                     Title = "Руководство для использования запросов",
                     Description = "Полное руководство для использования запросов находящихся в проекте"
                 });
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Version = "v2",
+                    Title = "Руководство для использования запросов",
+                    Description = "Полное руководство для использования запросов находящихся в проекте"
+                });
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "APIS_Degtiannikov.xml");
                 c.IncludeXmlComments(filePath);
             });
@@ -38,6 +44,7 @@ namespace APIS_Degtiannikov
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json","Запросы GET");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json","Запросы POST");
             });
         }
     }

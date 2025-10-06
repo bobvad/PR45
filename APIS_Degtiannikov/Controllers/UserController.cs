@@ -37,5 +37,51 @@ namespace APIS_Degtiannikov.Controllers
                 return StatusCode(500);
             }
         }
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary> 
+        /// <param name="Login">Логин пользователя</param>
+        /// <param name="Password">Пароль пользователя</param>
+        /// <remarks>Данный метод регистрирует нового пользователя в системе</remarks>
+        /// <response code="200">Пользователь успешно зарегистрирован</response>
+        /// <response code="400">Неверные данные для регистрации</response>
+        /// <response code="409">Пользователь с таким логином уже существует</response>
+        /// <response code="500">При выполнении запроса на стороне сервера возникли ошибки</response>
+        [Route("RegIn")]
+        [HttpPost]
+        [ProducesResponseType(typeof(Users), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
+        public ActionResult RegIn([FromForm] string Login, [FromForm] string Password)
+        {
+            try
+            {
+                var context = new UserContext();
+                {
+                    if (context.Users.Any(u => u.Login == Login))
+                        return StatusCode(409, "Пользователь с таким логином уже существует");
+
+                    Users user = new Users()
+                    {
+                        Login = Login,
+                        Password = Password 
+                    };
+
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    return Ok(new
+                    {
+                        userId = user.Id,
+                        login = user.Login
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при регистрации: {ex.Message}");
+                return StatusCode(500, "Произошла ошибка при регистрации пользователя");
+            }
+        }
     }
 }
